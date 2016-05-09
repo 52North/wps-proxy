@@ -1,6 +1,5 @@
 package org.n52.restfulwpsproxy.wepapp.soap;
 
-import net.opengis.wps.x20.ProcessOfferingsDocument;
 import org.n52.restfulwpsproxy.webapp.soap.message.WPSRequest;
 import org.n52.restfulwpsproxy.webapp.soap.message.WPSResponse;
 import org.n52.restfulwpsproxy.webapp.soap.service.WPSOperationRequest;
