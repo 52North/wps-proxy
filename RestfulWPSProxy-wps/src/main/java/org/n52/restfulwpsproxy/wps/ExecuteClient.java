@@ -54,6 +54,11 @@ public class ExecuteClient extends AbstractWPSClient {
         return restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, StatusInfoDocument.class).getBody();
     }
 
+    public StatusInfoDocument asyncExecute(String processId, String executeDocument) {
+        HttpEntity requestEntity = new HttpEntity(executeDocument, headers);
+        return restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, StatusInfoDocument.class).getBody();
+    }
+
     public ResultDocument syncExecute(String processId, ExecuteDocument executeDocument) throws URISyntaxException {
         HttpEntity requestEntity = new HttpEntity(executeDocument, headers);
         return restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, ResultDocument.class).getBody();

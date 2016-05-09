@@ -22,7 +22,7 @@
  * visit the Free Software Foundation web page, http://www.fsf.org.
  */
 
-package org.n52.restfulwpsproxy.rest;
+package org.n52.restfulwpsproxy.webapp.rest;
 
 import javax.servlet.http.HttpServletRequest;
 import net.opengis.wps.x20.StatusInfoDocument;

@@ -36,6 +36,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public class CapabilitiesClient extends AbstractWPSClient {
 
+    private static final String REQUEST_GET_CAPABILITIES = "GetCapabilities";
+
     /**
      * Constructor.
      *
@@ -48,11 +50,11 @@ public class CapabilitiesClient extends AbstractWPSClient {
 
     public CapabilitiesDocument get() {
         HttpEntity requestEntity = new HttpEntity(null, headers);
-        
+
         ResponseEntity<CapabilitiesDocument> capabilities = restTemplate.exchange(
-                new RequestUrlBuilder("GetCapabilities").build(), 
-                HttpMethod.GET, 
-                requestEntity, 
+                new RequestUrlBuilder(REQUEST_GET_CAPABILITIES).build(),
+                HttpMethod.GET,
+                requestEntity,
                 CapabilitiesDocument.class);
 
         return capabilities.getBody();

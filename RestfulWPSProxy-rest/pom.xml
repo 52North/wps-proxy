@@ -13,6 +13,44 @@
     <artifactId>52n-wps-proxy-rest</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>jaxb2-maven-plugin</artifactId>  
+                <version>1.4</version>  
+                <executions>  
+                    <execution>  
+                        <goals>  
+                            <goal>xjc</goal>  
+                        </goals>  
+                        <phase>generate-sources</phase>  
+                    </execution>  
+                </executions>  
+                <configuration>  
+                    <clearOutputDir>false</clearOutputDir>  
+                    <outputDirectory>src/main/java</outputDirectory>  
+                    <schemaDirectory>src/main/webapp/schemas</schemaDirectory>  
+                    <includeSchema>**/*.xsd</includeSchema>                        
+                    <enableIntrospection>false</enableIntrospection>  
+                </configuration>  
+            </plugin>  
+        </plugins>
+        
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+            </resource>
+            <resource>
+                <directory>src/main/webapp/schemas</directory>
+            </resource>
+        </resources>
+        
+    </build>
 
     <dependencies>
         <dependency>
@@ -57,6 +95,23 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>4.2.5.RELEASE</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-core</artifactId>
+            <version>2.3.0.RELEASE</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+            <version>1.6.2</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -96,6 +151,11 @@
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
             <artifactId>xmlbeans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.xmlschema</groupId>
+            <artifactId>xmlschema-core</artifactId>
+            <version>2.0.1</version>
         </dependency>
     </dependencies>
     
