@@ -68,8 +68,6 @@
             <artifactId>52n-wps-proxy-util</artifactId>
             <version>${version}</version>
         </dependency>
-        
-        
         <dependency>
             <groupId>org.n52.wps</groupId>
             <artifactId>52n-xml-wps-v20</artifactId>
@@ -98,13 +96,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>4.2.5.RELEASE</version>
         </dependency>
         
         <dependency>
             <groupId>org.springframework.ws</groupId>
             <artifactId>spring-ws-core</artifactId>
-            <version>2.3.0.RELEASE</version>
         </dependency>
         
         <dependency>
@@ -155,7 +151,6 @@
         <dependency>
             <groupId>org.apache.ws.xmlschema</groupId>
             <artifactId>xmlschema-core</artifactId>
-            <version>2.0.1</version>
         </dependency>
     </dependencies>
     

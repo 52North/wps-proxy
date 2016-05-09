@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>  
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://org/n52/restfulwpsproxy/webapp/soap/service" xmlns:message="http://org/n52/restfulwpsproxy/webapp/soap/message" targetNamespace="http://org/n52/restfulwpsproxy/webapp/soap/service" elementFormDefault="qualified">  
-    <xsd:import namespace="http://org/n52/restfulwpsproxy/webapp/soap/message" schemaLocation="WPSMessage.xsd"/> 
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://org/n52/restfulwpsproxy/webapp/soap/gen/service" xmlns:message="http://org/n52/restfulwpsproxy/webapp/soap/gen/message" targetNamespace="http://org/n52/restfulwpsproxy/webapp/soap/gen/service" elementFormDefault="qualified">  
+    <xsd:import namespace="http://org/n52/restfulwpsproxy/webapp/soap/gen/message" schemaLocation="WPSMessage.xsd"/> 
     <xsd:element name="WPSOperationRequest"> 
         <xsd:complexType>  
             <xsd:sequence>  

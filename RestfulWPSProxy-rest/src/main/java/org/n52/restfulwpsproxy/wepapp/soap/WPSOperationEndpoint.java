@@ -1,9 +1,9 @@
 package org.n52.restfulwpsproxy.wepapp.soap;
 
-import org.n52.restfulwpsproxy.webapp.soap.message.WPSRequest;
-import org.n52.restfulwpsproxy.webapp.soap.message.WPSResponse;
-import org.n52.restfulwpsproxy.webapp.soap.service.WPSOperationRequest;
-import org.n52.restfulwpsproxy.webapp.soap.service.WPSOperationResponse;
+import org.n52.restfulwpsproxy.webapp.soap.gen.message.WPSRequest;
+import org.n52.restfulwpsproxy.webapp.soap.gen.message.WPSResponse;
+import org.n52.restfulwpsproxy.webapp.soap.gen.service.WPSOperationRequest;
+import org.n52.restfulwpsproxy.webapp.soap.gen.service.WPSOperationResponse;
 import org.n52.restfulwpsproxy.wps.CapabilitiesClient;
 import org.n52.restfulwpsproxy.wps.ExecuteClient;
 import org.n52.restfulwpsproxy.wps.GetStatusClient;
@@ -22,7 +22,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 public class WPSOperationEndpoint {
 
-    private static final String TARGET_NAMESPACE = "http://org/n52/restfulwpsproxy/webapp/soap/service";
+    private static final String TARGET_NAMESPACE = "http://org/n52/restfulwpsproxy/webapp/soap/gen/service";
 
     private final CapabilitiesClient capabilitiesClient;
     private final ExecuteClient executeClient;

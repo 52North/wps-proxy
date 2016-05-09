@@ -13,8 +13,10 @@
     <properties>
         <wps.base.url>http://geoprocessing.demo.52north.org/wps/WebProcessingService</wps.base.url>
         <base.url>http://localhost:8080/RestfulWPSProxy</base.url>
-        <spring.version>4.2.4.RELEASE</spring.version>
+        <spring.version>4.2.5.RELEASE</spring.version>
+        <spring.ws.version>2.3.0.RELEASE</spring.ws.version>
         <jackson.version>2.3.3</jackson.version>
+        <n52.xml.wps.version>2.1.1-SNAPSHOT</n52.xml.wps.version>
     </properties>
 
     <repositories>
@@ -136,7 +138,7 @@
             <dependency>
                 <groupId>org.n52.wps</groupId>
                 <artifactId>52n-xml-wps-v20</artifactId>
-                <version>2.1.1-SNAPSHOT</version>
+                <version>${n52.xml.wps.version}</version>
             </dependency>
         
             <dependency>
@@ -163,6 +165,16 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-oxm</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ws</groupId>
+                <artifactId>spring-ws-core</artifactId>
+                <version>${spring.ws.version}</version>
             </dependency>
 
             <dependency>
@@ -212,6 +224,11 @@
                 <groupId>org.apache.xmlbeans</groupId>
                 <artifactId>xmlbeans</artifactId>
                 <version>2.6.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.xmlschema</groupId>
+                <artifactId>xmlschema-core</artifactId>
+                <version>2.0.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

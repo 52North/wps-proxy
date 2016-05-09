@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>  
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://org/n52/restfulwpsproxy/webapp/soap/message" targetNamespace="http://org/n52/restfulwpsproxy/webapp/soap/message" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://org/n52/restfulwpsproxy/webapp/soap/gen/message" targetNamespace="http://org/n52/restfulwpsproxy/webapp/soap/gen/message" elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xs:element name="WPSRequest" type="WPSRequest"/>
     <xs:element name="WPSResponse" type="WPSResponse"/>
     <xs:complexType name="WPSRequest">  
