@@ -23,8 +23,10 @@
  */
 package org.n52.restfulwpsproxy.serializer;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.n52.restfulwpsproxy.serializer.json.WPSCapabilitiesJsonModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.n52.restfulwpsproxy.serializer.json.WPSProcessesJsonModule;
 import org.n52.restfulwpsproxy.serializer.json.WPSStatusJsonModule;
 import org.n52.restfulwpsproxy.serializer.json.WPSExecuteJsonModule;
@@ -43,5 +45,8 @@ public class WPSBeansObjectMapper extends ObjectMapper {
         this.registerModule(new WPSStatusJsonModule());
         this.registerModule(new WPSExecuteJsonModule(this));
         this.registerModule(new WPSGetResultsJsonModule());
+        
+        setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
     }
 }
