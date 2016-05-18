@@ -90,7 +90,7 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         public void serialize(ResultDocument.Result t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
             jg.writeStringField(JOB_ID, t.getJobID());
-            jg.writeStringField(EXPIRATION_DATE, toStringOrNull(t.getExpirationDate()));
+            writeStringFieldIfNotNull(jg, EXPIRATION_DATE, t.getExpirationDate());
             writeArrayOfObjects(OUTPUT, t.getOutputArray(), jg);
             jg.writeEndObject();
         }
@@ -107,9 +107,9 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         public void serialize(DataOutputType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
             jg.writeObjectField(ID, t.getId());
-            jg.writeObjectField(REFERENCE, t.getReference());
-            jg.writeObjectField(OUTPUT, t.getOutput());
-            jg.writeObjectField(DATA, t.getData());
+            writeObjectFieldIfNotNull(jg, REFERENCE, t.getReference());
+            writeObjectFieldIfNotNull(jg, OUTPUT, t.getOutput());
+            writeObjectFieldIfNotNull(jg, DATA, t.getData());
             jg.writeEndObject();
         }
 
@@ -126,8 +126,8 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
             try {
                 jg.writeStartObject();
                 jg.writeStringField(_MIME_TYPE, t.getMimeType());
-                jg.writeStringField(_ENCODING, t.getEncoding());
-                jg.writeStringField(_SCHEMA, t.getSchema());
+                writeStringFieldIfNotNull(jg, _ENCODING, t.getEncoding());
+                writeStringFieldIfNotNull(jg, _SCHEMA, t.getSchema());
 
                 NodeList candidateNodes = t.getDomNode().getChildNodes();
                 Node complexDataNode = candidateNodes.getLength() > 1 ? candidateNodes.item(1) : candidateNodes.item(0);
@@ -154,8 +154,8 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
 
             jg.writeStartObject();
             jg.writeStringField(_MIME_TYPE, r.getMimeType());
-            jg.writeStringField(_ENCODING, r.getEncoding());
-            jg.writeStringField(_SCHEMA, r.getSchema());
+            writeStringFieldIfNotNull(jg, _ENCODING, r.getEncoding());
+            writeStringFieldIfNotNull(jg, _SCHEMA, r.getSchema());
             jg.writeStringField(_HREF, r.getHref());
 
             jg.writeEndObject();

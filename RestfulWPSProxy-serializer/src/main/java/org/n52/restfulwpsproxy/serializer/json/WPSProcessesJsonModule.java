@@ -219,9 +219,9 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
             jg.writeStartObject();
             jg.writeStringField(_DEFAULT, "" + t.getDefault());
             jg.writeStringField(_MIME_TYPE, t.getMimeType());
-            jg.writeStringField(_ENCODING, t.getEncoding());
-            jg.writeStringField(_SCHEMA, t.getSchema());
-            jg.writeStringField(_MAXIMUM_MEGABYTES, toStringOrNull(t.getMaximumMegabytes()));
+            writeStringFieldIfNotNull(jg, _ENCODING, t.getEncoding());
+            writeStringFieldIfNotNull(jg, _SCHEMA, t.getSchema());
+            writeStringFieldIfNotNull(jg, _MAXIMUM_MEGABYTES, t.getMaximumMegabytes());
             jg.writeEndObject();
         }
 
@@ -237,7 +237,8 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
         public void serialize(LiteralDataType.LiteralDataDomain t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
             jg.writeStringField(ANY_VALUE, t.getAnyValue() == null ? null : "");
-            jg.writeStringField(ALLOWED_VALUES, t.getAllowedValues() == null ? null : "");
+//            jg.writeStringField(ALLOWED_VALUES, t.getAllowedValues() == null ? null : "");
+//            writeStringFieldIfNotNull(jg, ALLOWED_VALUES, t.getAllowedValues());//TODO implement serializer
             jg.writeObjectField(DATA_TYPE, t.getDataType());
             jg.writeEndObject();
         }
