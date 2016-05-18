@@ -34,6 +34,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import net.opengis.wps.x20.DataDocument;
 import net.opengis.wps.x20.DataOutputType;
+import net.opengis.wps.x20.ReferenceType;
 import net.opengis.wps.x20.ResultDocument;
 import static org.n52.restfulwpsproxy.serializer.json.AbstractWPSJsonModule.toStringOrNull;
 import org.n52.restfulwpsproxy.util.XMLBeansHelper;
@@ -53,6 +54,7 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
     private static final String JOB_ID = "JobID";
     private static final String DATA = "Data";
     private static final String REFERENCE = "Reference";
+    private static final String _HREF = "_href";
     private static final String ID = "ID";
     private static final String _TEXT = "_text";
     private static final String _SCHEMA = "_schema";
@@ -64,6 +66,7 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         addSerializer(new ResultSerializer());
         addSerializer(new DataOutputTypeSerialzer());
         addSerializer(new DataSerializer());
+        addSerializer(new ReferenceSerializer());
     }
 
     private static final class ResultDocumentSerializer extends JsonSerializer<ResultDocument> {
@@ -140,6 +143,30 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         public Class<DataDocument.Data> handledType() {
             return DataDocument.Data.class;
         }
+    }
+
+    private static final class ReferenceSerializer extends JsonSerializer<ReferenceType> {
+
+        @Override
+        public void serialize(ReferenceType r,
+                JsonGenerator jg,
+                SerializerProvider sp) throws IOException, JsonProcessingException {
+
+            jg.writeStartObject();
+            jg.writeStringField(_MIME_TYPE, r.getMimeType());
+            jg.writeStringField(_ENCODING, r.getEncoding());
+            jg.writeStringField(_SCHEMA, r.getSchema());
+            jg.writeStringField(_HREF, r.getHref());
+
+            jg.writeEndObject();
+            
+        }
+
+        @Override
+        public Class<ReferenceType> handledType() {
+            return ReferenceType.class;
+        }
+
     }
 
 }
