@@ -11,7 +11,7 @@
     <name>52n-wps-proxy-parent</name>
     
     <properties>
-        <wps.base.url>http://geoprocessing.demo.52north.org/wps/WebProcessingService</wps.base.url>
+        <wps.base.url>http://localhost/wps/WebProcessingService</wps.base.url>
         <base.url>http://localhost:8080/RestfulWPSProxy</base.url>
         <spring.version>4.2.4.RELEASE</spring.version>
         <jackson.version>2.3.3</jackson.version>
@@ -76,9 +76,6 @@
                             <include>**/*.java</include>
                         </includes>
                         <strictCheck>true</strictCheck>
-                        <properties>
-                            <author>The enviroCar project</author>
-                        </properties>
                         <mapping>
                             <java>SLASHSTAR_STYLE</java>
                         </mapping>
