@@ -52,6 +52,14 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         jg.writeEndArray();
     }
     
+    protected static final void writeArrayOfStrings(String fieldName, String[] strings, JsonGenerator jg) throws IOException {
+        jg.writeArrayFieldStart(fieldName);
+        for (String s : strings) {
+            jg.writeString(s);
+        }
+        jg.writeEndArray();
+    }
+    
     protected static final String toStringOrEmpty(Object object){
         return object == null ? "" : object.toString();
     }

@@ -131,7 +131,7 @@ public class WPSCapabilitiesJsonModule extends AbstractWPSJsonModule {
             writeStringFieldIfNotNull(jg, TITLE, si.getTitleArray(0).getStringValue());
             writeStringFieldIfNotNull(jg, A_ABSTRACT, si.getAbstractArray(0).getStringValue());
             jg.writeStringField(SERVICE_TYPE, si.getServiceType().getStringValue());
-            jg.writeStringField(SERVICE_TYPE_VERSION, si.getServiceTypeVersionArray(0));
+            writeArrayOfStrings(SERVICE_TYPE_VERSION, si.getServiceTypeVersionArray(), jg);
             writeStringFieldIfNotNull(jg, FEES, si.getFees());
             writeStringFieldIfNotNull(jg, ACCESS_CONSTRAINTS, si.getAccessConstraintsArray(0));
             jg.writeEndObject();
