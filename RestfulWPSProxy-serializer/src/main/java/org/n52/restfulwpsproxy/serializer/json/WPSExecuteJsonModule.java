@@ -326,6 +326,9 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
             if (node.has("_schema")) {
                 instance.setSchema(node.get("_schema").asText());
             }
+            if (node.has("_encoding")) {
+                instance.setEncoding(node.get("_encoding").asText());
+            }
             if (node.has("_transmission")) {
                 instance.setTransmission(DataTransmissionModeType.Enum.forString(node.get("_transmission").asText()));
             }
