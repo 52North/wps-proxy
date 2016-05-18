@@ -29,8 +29,9 @@
     </mvc:annotation-driven>
 
     <bean id="contentNegotiationManger" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <property name="favorPathExtension" value="true" />
         <property name="ignoreAcceptHeader" value="false" />
+        <property name="favorParameter" value="true" />
+        <property name="parameterName" value="format"/>
         <property name="defaultContentType" ref="jsonMediaType" />
         <property name="mediaTypes">
             <value>
@@ -47,7 +48,7 @@
     <bean id="ObjectMapper" class="org.n52.restfulwpsproxy.serializer.WPSBeansObjectMapper" />
     
     <bean id="proxyBaseUrl" class="java.lang.String">
-        <constructor-arg type="String" value="http://localhost:8080/RestfulWPSProxy/"/>
+        <constructor-arg type="String" value="http://localhost:8080/rest-proxy/"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
