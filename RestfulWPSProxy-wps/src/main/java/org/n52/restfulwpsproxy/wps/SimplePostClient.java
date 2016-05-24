@@ -7,6 +7,7 @@ package org.n52.restfulwpsproxy.wps;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -28,6 +29,7 @@ public class SimplePostClient extends AbstractWPSClient {
 
     public String performPostRequest(String xmlRequest) {
         HttpEntity requestEntity = new HttpEntity(xmlRequest, headers);
-        return restTemplate.exchange(baseUrl, HttpMethod.GET, requestEntity, String.class).getBody();
+        ResponseEntity<String> exchange = restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, String.class);
+        return exchange.getBody();
     }
 }

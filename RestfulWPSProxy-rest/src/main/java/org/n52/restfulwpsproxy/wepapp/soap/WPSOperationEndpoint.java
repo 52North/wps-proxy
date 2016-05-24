@@ -30,6 +30,7 @@ public class WPSOperationEndpoint {
     private final ProcessesClient processesClient;
     private final SimplePostClient postClient;
 
+    // ENDPOINT WSDL can be found under <baseUrl>/endpoints/WPSOperations.wsdl 
     @Autowired
     public WPSOperationEndpoint(CapabilitiesClient capabilitiesClient,
             ExecuteClient executeClient,
