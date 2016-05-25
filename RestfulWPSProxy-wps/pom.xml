@@ -8,12 +8,15 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <groupId>org.n52.restfulwpsproxy</groupId>
     <artifactId>52n-wps-proxy-wps</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>org.n52.restfulwpsproxy</groupId>
+            <artifactId>52n-wps-proxy-util</artifactId>
+            <version>${version}</version>
+        </dependency>
         <dependency>
             <groupId>org.n52.wps</groupId>
             <artifactId>52n-xml-wps-v20</artifactId>
