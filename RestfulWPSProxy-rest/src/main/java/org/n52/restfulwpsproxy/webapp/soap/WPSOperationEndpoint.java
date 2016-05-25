@@ -1,5 +1,6 @@
 package org.n52.restfulwpsproxy.webapp.soap;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -54,20 +55,15 @@ public class WPSOperationEndpoint {
         try {
             res = postClient.performPostRequest(request.getWpsRequest().getAny());
             
-            XmlOptions xmlOptions = new XmlOptions();
-            xmlOptions.setSaveNoXmlDecl();
-            
-            XmlObject xmlRes = XmlObject.Factory.parse(res, xmlOptions);
-            
             DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document wpsResponseDoc = builder.parse(xmlRes.newInputStream());
+            Document wpsResponseDoc = builder.parse(new ByteArrayInputStream(res.getBytes()));
             
             // Set the response
             message.setAny(wpsResponseDoc.getDocumentElement());
             response.setWpsResponse(message);
-        } catch (TransformerFactoryConfigurationError | TransformerException | XmlException | ParserConfigurationException | SAXException | IOException e) {
+        } catch (TransformerFactoryConfigurationError | TransformerException | ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
 
