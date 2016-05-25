@@ -9,9 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <groupId>org.n52.restfulwpsproxy</groupId>
     <artifactId>52n-wps-proxy-webapp</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     
     <build>
@@ -37,18 +35,6 @@
                 </configuration>  
             </plugin>  
         </plugins>
-        
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/webapp</directory>
-            </resource>
-            <resource>
-                <directory>src/main/webapp/schemas</directory>
-            </resource>
-        </resources>
         
     </build>
 

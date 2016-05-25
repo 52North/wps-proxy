@@ -8,9 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <groupId>org.n52.restfulwpsproxy</groupId>
     <artifactId>52n-wps-proxy-wps</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
