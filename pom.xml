@@ -83,32 +83,6 @@
                         </webResources>
                     </configuration>
                 </plugin>
-
-                <plugin>
-                    <groupId>com.mycila.maven-license-plugin</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <inherited>false</inherited>
-                    <version>1.9.0</version>
-                    <configuration>
-                        <aggregate>true</aggregate>
-                        <header>license/license_header.txt</header>
-                        <includes>
-                            <include>**/*.java</include>
-                        </includes>
-                        <strictCheck>true</strictCheck>
-                        <mapping>
-                            <java>SLASHSTAR_STYLE</java>
-                        </mapping>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>format</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
                 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -153,6 +127,29 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <header>misc/licenses/license_header.txt</header>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <strictCheck>true</strictCheck>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     
