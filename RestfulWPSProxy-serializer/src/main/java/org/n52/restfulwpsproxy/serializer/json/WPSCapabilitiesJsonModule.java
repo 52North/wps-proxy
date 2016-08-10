@@ -44,7 +44,7 @@ import org.n52.restfulwpsproxy.util.EndpointUtil;
  *
  * @author dewall
  */
-public class WPSCapabilitiesJsonModule extends SimpleModule {
+public class WPSCapabilitiesJsonModule extends AbstractWPSJsonModule {
 
     private static final String _VERSION = "_version";
     private static final String _SERVICE = "_service";
@@ -126,12 +126,12 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         public void serialize(ServiceIdentificationDocument.ServiceIdentification si,
                 JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(TITLE, si.getTitleArray(0).getStringValue());
-            jg.writeStringField(A_ABSTRACT, si.getAbstractArray(0).getStringValue());
+            writeStringFieldIfNotNull(jg, TITLE, si.getTitleArray(0).getStringValue());
+            writeStringFieldIfNotNull(jg, A_ABSTRACT, si.getAbstractArray(0).getStringValue());
             jg.writeStringField(SERVICE_TYPE, si.getServiceType().getStringValue());
-            jg.writeStringField(SERVICE_TYPE_VERSION, si.getServiceTypeVersionArray(0));
-            jg.writeStringField(FEES, si.getFees());
-            jg.writeStringField(ACCESS_CONSTRAINTS, si.getAccessConstraintsArray(0));
+            writeArrayOfStrings(SERVICE_TYPE_VERSION, si.getServiceTypeVersionArray(), jg);
+            writeStringFieldIfNotNull(jg, FEES, si.getFees());
+            writeStringFieldIfNotNull(jg, ACCESS_CONSTRAINTS, si.getAccessConstraintsArray(0));
             jg.writeEndObject();
         }
 
@@ -163,10 +163,10 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         @Override
         public void serialize(OnlineResourceType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(TITLE, t.getTitle());
-            jg.writeStringField(H_REF, t.getHref());
-            jg.writeStringField(ROLE, t.getRole());
-            jg.writeStringField(ARCROLE, t.getArcrole());
+            writeStringFieldIfNotNull(jg, TITLE, t.getTitle());
+            writeStringFieldIfNotNull(jg, H_REF, t.getHref());
+            writeStringFieldIfNotNull(jg, ROLE, t.getRole());
+            writeStringFieldIfNotNull(jg, ARCROLE, t.getArcrole());
             jg.writeEndObject();
         }
 
@@ -198,8 +198,8 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         @Override
         public void serialize(ContactType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(CONTACT_INSTRUCTIONS, t.getContactInstructions());
-            jg.writeObjectField(HOURS_OF_SERVICE, t.getHoursOfService());
+            writeStringFieldIfNotNull(jg, CONTACT_INSTRUCTIONS, t.getContactInstructions());
+            writeStringFieldIfNotNull(jg, HOURS_OF_SERVICE, t.getHoursOfService());
             // TODO add others
             jg.writeEndObject();
         }
@@ -216,12 +216,12 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         @Override
         public void serialize(AddressType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(DELIVERY_POINT, t.getDeliveryPointArray(0));
-            jg.writeStringField(CITY, t.getCity());
-            jg.writeStringField(ADMINISTRATIVE_AREA, t.getAdministrativeArea());
-            jg.writeStringField(PORTAL_CODE, t.getPostalCode());
-            jg.writeStringField(COUNTRY, t.getCountry());
-            jg.writeStringField(ELECTRONIC_MAIL_ADDRESS, t.getElectronicMailAddressArray(0));
+            writeStringFieldIfNotNull(jg, DELIVERY_POINT, t.getDeliveryPointArray(0));
+            writeStringFieldIfNotNull(jg, CITY, t.getCity());
+            writeStringFieldIfNotNull(jg, ADMINISTRATIVE_AREA, t.getAdministrativeArea());
+            writeStringFieldIfNotNull(jg, PORTAL_CODE, t.getPostalCode());
+            writeStringFieldIfNotNull(jg, COUNTRY, t.getCountry());
+            writeStringFieldIfNotNull(jg, ELECTRONIC_MAIL_ADDRESS, t.getElectronicMailAddressArray(0));
             jg.writeEndObject();
         }
 

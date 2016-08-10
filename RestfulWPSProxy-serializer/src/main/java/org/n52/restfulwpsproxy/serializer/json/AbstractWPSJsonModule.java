@@ -21,6 +21,9 @@
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.io.IOException;
@@ -47,11 +50,31 @@ public abstract class AbstractWPSJsonModule extends SimpleModule {
         jg.writeEndArray();
     }
     
+    protected static final void writeArrayOfStrings(String fieldName, String[] strings, JsonGenerator jg) throws IOException {
+        jg.writeArrayFieldStart(fieldName);
+        for (String s : strings) {
+            jg.writeString(s);
+        }
+        jg.writeEndArray();
+    }
+    
     protected static final String toStringOrEmpty(Object object){
         return object == null ? "" : object.toString();
     }
     
     protected static final String toStringOrNull(Object object){
         return object == null ? null : object.toString();
+    }
+    
+    protected static final void writeStringFieldIfNotNull(JsonGenerator jg, String field,  Object object) throws JsonGenerationException, IOException{
+        if(object != null){
+            jg.writeStringField(field, object.toString());
+        }
+    }
+    
+    protected static final void writeObjectFieldIfNotNull(JsonGenerator jg, String field,  Object object) throws JsonGenerationException, IOException{
+        if(object != null){
+            jg.writeObjectField(field, object);
+        }
     }
 }
