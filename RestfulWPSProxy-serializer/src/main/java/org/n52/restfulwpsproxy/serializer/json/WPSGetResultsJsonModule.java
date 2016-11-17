@@ -32,6 +32,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import net.opengis.wps.x20.DataDocument;
 import net.opengis.wps.x20.DataOutputType;
+import net.opengis.wps.x20.LiteralValueDocument;
+import net.opengis.wps.x20.LiteralValueDocument.LiteralValue;
 import net.opengis.wps.x20.ReferenceType;
 import net.opengis.wps.x20.ResultDocument;
 import static org.n52.restfulwpsproxy.serializer.json.AbstractWPSJsonModule.toStringOrNull;
@@ -50,7 +52,8 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
     private static final String OUTPUT = "Output";
     private static final String EXPIRATION_DATE = "ExpirationDate";
     private static final String JOB_ID = "JobID";
-    private static final String DATA = "Data";
+    private static final String COMPLEXDATA = "ComplexData";
+    private static final String LITERALDATA = "LiteralData";
     private static final String REFERENCE = "Reference";
     private static final String _HREF = "_href";
     private static final String ID = "ID";
@@ -64,6 +67,7 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         addSerializer(new ResultSerializer());
         addSerializer(new DataOutputTypeSerialzer());
         addSerializer(new DataSerializer());
+        addSerializer(new LiteralValueSerializer());
         addSerializer(new ReferenceSerializer());
     }
 
@@ -107,7 +111,21 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
             jg.writeObjectField(ID, t.getId());
             writeObjectFieldIfNotNull(jg, REFERENCE, t.getReference());
             writeObjectFieldIfNotNull(jg, OUTPUT, t.getOutput());
-            writeObjectFieldIfNotNull(jg, DATA, t.getData());
+            
+            NodeList candidateNodes = t.getData().getDomNode().getChildNodes();
+            Node complexDataNode = candidateNodes.getLength() > 1 ? candidateNodes.item(1) : candidateNodes.item(0);
+            
+        	try {
+        		LiteralValueDocument literalValueDocument = LiteralValueDocument.Factory.parse(complexDataNode);
+        		writeObjectFieldIfNotNull(jg, LITERALDATA, literalValueDocument.getLiteralValue());
+                jg.writeEndObject();
+        		return;
+        		
+			} catch (Exception e) {
+				Logger.getLogger(WPSGetResultsJsonModule.class.getName()).log(Level.FINE, null, e);
+			}
+            
+            writeObjectFieldIfNotNull(jg, COMPLEXDATA, t.getData());
             jg.writeEndObject();
         }
 
@@ -121,14 +139,16 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
 
         @Override
         public void serialize(DataDocument.Data t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
-            try {
+        	
+        	try {
                 jg.writeStartObject();
-                jg.writeStringField(_MIME_TYPE, t.getMimeType());
+                writeStringFieldIfNotNull(jg, _MIME_TYPE, t.getMimeType());
                 writeStringFieldIfNotNull(jg, _ENCODING, t.getEncoding());
                 writeStringFieldIfNotNull(jg, _SCHEMA, t.getSchema());
-
+                
                 NodeList candidateNodes = t.getDomNode().getChildNodes();
                 Node complexDataNode = candidateNodes.getLength() > 1 ? candidateNodes.item(1) : candidateNodes.item(0);
+                
                 jg.writeStringField(_TEXT, XMLBeansHelper.nodeToString(complexDataNode));
 
                 jg.writeEndObject();
@@ -142,6 +162,22 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
             return DataDocument.Data.class;
         }
     }
+    
+	private static final class LiteralValueSerializer extends JsonSerializer<LiteralValue> {
+
+		@Override
+		public void serialize(LiteralValue t, JsonGenerator jg, SerializerProvider sp)
+				throws IOException, JsonProcessingException {
+			jg.writeStartObject();
+			jg.writeStringField(_TEXT, t.getStringValue());
+			jg.writeEndObject();
+		}
+
+		@Override
+		public Class<LiteralValue> handledType() {
+			return LiteralValue.class;
+		}
+	}
 
     private static final class ReferenceSerializer extends JsonSerializer<ReferenceType> {
 

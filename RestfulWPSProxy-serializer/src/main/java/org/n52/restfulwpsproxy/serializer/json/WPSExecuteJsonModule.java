@@ -31,11 +31,15 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.opengis.wps.x20.BoundingBoxDataDocument.BoundingBoxData;
 import net.opengis.wps.x20.DataDocument;
+import net.opengis.wps.x20.DataDocument.Data;
 import net.opengis.wps.x20.DataInputType;
 import net.opengis.wps.x20.DataTransmissionModeType;
 import net.opengis.wps.x20.ExecuteDocument;
 import net.opengis.wps.x20.ExecuteRequestType;
+import net.opengis.wps.x20.LiteralValueDocument;
 import net.opengis.wps.x20.LiteralValueDocument.LiteralValue;
 import net.opengis.wps.x20.OutputDefinitionType;
 import net.opengis.wps.x20.ReferenceType;
@@ -60,6 +64,7 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
         addDeserializer(DataInputType.class, new DataInputTypeDeserializer());
         addDeserializer(ReferenceType.class, new ReferenceTypeDeserializer());
         addDeserializer(DataDocument.Data.class, new DataTypeSerializer());
+        addDeserializer(LiteralValueDocument.class, new LiteralValueDocumentSerializer());
         this.mapper = mapper;
     }
 
@@ -248,10 +253,20 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
                 instance.setReference(mapper
                         .readValue(node.get("Reference").traverse(), ReferenceType.class));
             }
-            if (node.has("Data")) {
+            if (node.has("ComplexData")) {
                 instance.setData(mapper
-                        .readValue(node.get("Data").traverse(), DataDocument.Data.class));
+                        .readValue(node.get("ComplexData").traverse(), DataDocument.Data.class));
             }
+            if (node.has("LiteralData")) {
+            	Data data = instance.addNewData();
+            	data.set(mapper
+                        .readValue(node.get("LiteralData").traverse(), LiteralValueDocument.class));
+            }
+//            if (node.has("BoundingBoxData")) {
+//            	Data data = instance.addNewData();
+//            	data.set(mapper
+//                        .readValue(node.get("BoundingBoxData").traverse(), BoundingBoxData.class));
+//            }
             if (node.has("Input")) {
                 instance.setInputArray(readArrayValues("Input", node, DataInputType.class, new TypeReference<List<DataInputType>>() {
                 }));
@@ -259,6 +274,22 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
         }
     }
 
+    private static final class LiteralValueDocumentSerializer extends AbstractWPSDeserializer<LiteralValueDocument>{
+
+		@Override
+		public LiteralValueDocument getInstance() {
+			return LiteralValueDocument.Factory.newInstance(XMLBeansHelper.getWPSXmlOptions());
+		}
+
+		@Override
+		public void deserialize(JsonParser jp, JsonNode node, LiteralValueDocument instance)
+				throws IOException, JsonProcessingException {
+            if (node.has("_text")) {
+                instance.addNewLiteralValue().set(getAsXmlString("_text", node));
+            }
+		}    	
+    }
+    
     private static final class ReferenceTypeDeserializer extends AbstractWPSDeserializer<ReferenceType> {
 
         @Override
