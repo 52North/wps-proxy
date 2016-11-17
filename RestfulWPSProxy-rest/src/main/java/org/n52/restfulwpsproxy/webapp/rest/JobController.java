@@ -23,7 +23,10 @@ package org.n52.restfulwpsproxy.webapp.rest;
 
 import javax.servlet.http.HttpServletRequest;
 import net.opengis.wps.x20.StatusInfoDocument;
+
+import org.n52.restfulwpsproxy.serializer.json.WPSJobsJsonModule;
 import org.n52.restfulwpsproxy.serializer.json.WPSStatusJsonModule;
+import org.n52.restfulwpsproxy.wps.GetJobsClient;
 import org.n52.restfulwpsproxy.wps.GetStatusClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +41,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @author dewall
  */
 @RestController
-@RequestMapping("/processes/{processId:.+}/jobs/{jobId:.+}")
+@RequestMapping("/processes/{processId:.+}/jobs")
 public class JobController {
 
     private final GetStatusClient client;
+    private final GetJobsClient getJobsClient;
 
     /**
      * Constructor.
@@ -49,23 +53,30 @@ public class JobController {
      * @param client wps client for status requests.
      */
     @Autowired
-    public JobController(GetStatusClient client) {
+    public JobController(GetStatusClient client, GetJobsClient getJobsClient) {
         this.client = client;
+        this.getJobsClient = getJobsClient;
     }
 
     @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity getJobs(@PathVariable("processId") String processId, HttpServletRequest request) {
+        String[] jobIds = getJobsClient.getJobIds(processId);
+        return ResponseEntity.ok(jobIds);
+    }
+    
+    @RequestMapping(value = "/{jobId:.+}", method = RequestMethod.GET)
     public ResponseEntity getStatus(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId, HttpServletRequest request) {
         StatusInfoDocument statusInfo = client.getStatusInfo(processId, jobId);
         return ResponseEntity.ok(new WPSStatusJsonModule.StatusInfoWrapperWithOutput(
                 request.getRequestURL().append("/outputs").toString(), statusInfo));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{jobId:.+}", method = RequestMethod.DELETE)
     public ResponseEntity deleteJob(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId, HttpServletRequest request) {
         return ResponseEntity.ok().build();
     }
     
-    @RequestMapping(value = "/outputs", method = RequestMethod.GET)
+    @RequestMapping(value = "/{jobId:.+}/outputs", method = RequestMethod.GET)
     public ResponseEntity getOutputs(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId, HttpServletRequest request) {
         return ResponseEntity.ok(client.getResults(processId, jobId));
     }

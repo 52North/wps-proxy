@@ -26,6 +26,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
+
+import org.n52.restfulwpsproxy.util.EndpointUtil;
+
 import net.opengis.ows.x20.DomainMetadataType;
 import net.opengis.wps.x20.DataDescriptionType;
 import net.opengis.wps.x20.FormatDocument;
@@ -67,6 +70,7 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
     private static final String ALLOWED_VALUES = "AllowedValues";
     private static final String ANY_VALUE = "AnyValue";
     private static final String _REFERENCE = "_reference";
+    private static final String EXECUTE_URL = "execute-url";
 
     /**
      * Constructor.
@@ -121,6 +125,7 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
             jg.writeStringField(_PROCESS_VERSION, t.getProcessVersion());
             jg.writeStringField(_JOB_CONTROL_OPTIONS, t.getJobControlOptions().get(0).toString());
             jg.writeStringField(_OUTPUT_TRANSMISSION, t.getOutputTransmission().get(0).toString());
+            jg.writeStringField(EXECUTE_URL, EndpointUtil.PROXYBASEURL + "processes/" + t.getProcess().getIdentifier().getStringValue() + "/jobs");
             jg.writeEndObject();
         }
 

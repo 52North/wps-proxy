@@ -29,4 +29,5 @@
     <bean parent="abstractWPSClient" class="org.n52.restfulwpsproxy.wps.GetStatusClient" />
     <bean parent="abstractWPSClient" class="org.n52.restfulwpsproxy.wps.ExecuteClient" />
     <bean parent="abstractWPSClient" class="org.n52.restfulwpsproxy.wps.SimplePostClient"/>
+    <bean parent="abstractWPSClient" class="org.n52.restfulwpsproxy.wps.GetJobsClient"/>
 </beans>

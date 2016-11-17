@@ -36,6 +36,7 @@ import net.opengis.wps.x20.DataInputType;
 import net.opengis.wps.x20.DataTransmissionModeType;
 import net.opengis.wps.x20.ExecuteDocument;
 import net.opengis.wps.x20.ExecuteRequestType;
+import net.opengis.wps.x20.LiteralValueDocument.LiteralValue;
 import net.opengis.wps.x20.OutputDefinitionType;
 import net.opengis.wps.x20.ReferenceType;
 import org.apache.xmlbeans.XmlObject;

@@ -38,7 +38,9 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
     private static final String STATUS_INFO = "StatusInfo";
     private static final String PROGRESS = "Progress";
     private static final String OUTPUT = "Output";
+    private static final String EXCEPTION = "Exception";
     private static final String SUCCEEDED = "Succeeded";
+    private static final Object FAILED = "Failed";
     private static final String STATUS = "Status";
     private static final String JOB_ID = "JobID";
 
@@ -78,7 +80,7 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
 
     private static final class StatusInfoWrapperSerializer extends JsonSerializer<StatusInfoWrapperWithOutput> {
 
-        @Override
+		@Override
         public void serialize(StatusInfoWrapperWithOutput t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             StatusInfoDocument.StatusInfo statusInfo = t.getStatusInfoDocument().getStatusInfo();
 
@@ -88,8 +90,10 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
             jg.writeStringField(STATUS, statusInfo.getStatus());
             if (statusInfo.getStatus().equals(SUCCEEDED)) {
                 jg.writeStringField(OUTPUT, t.getOutputUrl());
-            } else {
-                jg.writeNumberField(PROGRESS, statusInfo.getPercentCompleted());
+            } else if(statusInfo.getStatus().equals(FAILED)) {
+                jg.writeStringField(EXCEPTION, t.getOutputUrl());//TODO build getresultURL
+            }else{
+                jg.writeNumberField(PROGRESS, statusInfo.getPercentCompleted());            	
             }
             jg.writeEndObject();
             jg.writeEndObject();

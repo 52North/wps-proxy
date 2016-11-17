@@ -29,6 +29,7 @@ import org.n52.restfulwpsproxy.serializer.json.WPSProcessesJsonModule;
 import org.n52.restfulwpsproxy.serializer.json.WPSStatusJsonModule;
 import org.n52.restfulwpsproxy.serializer.json.WPSExecuteJsonModule;
 import org.n52.restfulwpsproxy.serializer.json.WPSGetResultsJsonModule;
+import org.n52.restfulwpsproxy.serializer.json.WPSJobsJsonModule;
 
 /**
  * TODO JavaDoc
@@ -43,6 +44,7 @@ public class WPSBeansObjectMapper extends ObjectMapper {
         this.registerModule(new WPSStatusJsonModule());
         this.registerModule(new WPSExecuteJsonModule(this));
         this.registerModule(new WPSGetResultsJsonModule());
+        this.registerModule(new WPSJobsJsonModule());
         
         setSerializationInclusion(JsonInclude.Include.NON_NULL);
         configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);

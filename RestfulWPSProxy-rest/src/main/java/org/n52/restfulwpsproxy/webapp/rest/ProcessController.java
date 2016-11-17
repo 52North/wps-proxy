@@ -30,6 +30,7 @@ import net.opengis.wps.x20.ResultDocument;
 import net.opengis.wps.x20.StatusInfoDocument;
 import org.n52.restfulwpsproxy.wps.CapabilitiesClient;
 import org.n52.restfulwpsproxy.wps.ExecuteClient;
+import org.n52.restfulwpsproxy.wps.GetJobsClient;
 import org.n52.restfulwpsproxy.wps.ProcessesClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,14 +53,16 @@ public class ProcessController {
     private final ExecuteClient executeClient;
     private final ProcessesClient processesClient;
     private final CapabilitiesClient capabilitiesClient;
+    private final GetJobsClient getJobsClient;
 
     @Autowired
     public ProcessController(ExecuteClient executeClient,
             ProcessesClient processesClient,
-            CapabilitiesClient capabilitiesClient) {
+            CapabilitiesClient capabilitiesClient, GetJobsClient getJobsClient) {
         this.processesClient = processesClient;
         this.executeClient = executeClient;
         this.capabilitiesClient = capabilitiesClient;
+        this.getJobsClient = getJobsClient;
     }
 
     @RequestMapping(value = "/{processId:.+}", method = RequestMethod.GET)
@@ -71,7 +74,7 @@ public class ProcessController {
                 .getProcessOfferings());
     }
 
-    @RequestMapping(value = "/{processId:.+}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{processId:.+}/jobs", method = RequestMethod.POST)
     public ResponseEntity execute(
             @PathVariable("processId") String processId,
             @RequestParam(value = "sync-execute", required = false, defaultValue = "false") boolean syncExecute,
@@ -82,12 +85,16 @@ public class ProcessController {
             executeDocument.getExecute().setMode(ExecuteRequestType.Mode.Enum.forString("async"));
             StatusInfoDocument asyncExecute = executeClient.asyncExecute(processId, executeDocument);
 
+            String jobId = asyncExecute.getStatusInfo().getJobID();
+            
             URI created = URI.create(
                     request.getRequestURL()
-                    .append("/jobs/")
-                    .append(asyncExecute.getStatusInfo().getJobID())
+                    .append("/")
+                    .append(jobId)
                     .toString());
 
+            getJobsClient.addJobId(processId, jobId);
+            
             return ResponseEntity.created(created).build();
         } else {
             executeDocument.getExecute().setMode(ExecuteRequestType.Mode.Enum.forString("sync"));
