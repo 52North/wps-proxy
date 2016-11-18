@@ -29,10 +29,9 @@
     </mvc:annotation-driven>
 
     <bean id="contentNegotiationManger" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <property name="ignoreAcceptHeader" value="false" />
+        <property name="ignoreAcceptHeader" value="true" />
         <property name="favorParameter" value="true" />
         <property name="parameterName" value="format"/>
-        <property name="defaultContentType" ref="jsonMediaType" />
         <property name="mediaTypes">
             <value>
                 json=application/json
@@ -48,7 +47,7 @@
     <bean id="ObjectMapper" class="org.n52.restfulwpsproxy.serializer.WPSBeansObjectMapper" />
     
     <bean id="proxyBaseUrl" class="java.lang.String">
-        <constructor-arg type="String" value="http://localhost:8080/rest-proxy/"/>
+        <constructor-arg type="String" value="http://tamis.dev.52north.org/52n-wps-proxy-rest-1.0-SNAPSHOT/"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016
- * by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -8,18 +7,17 @@
  * 48155 Muenster, Germany
  * info@52north.org
  *
- * This program is free software; you can redistribute and/or modify it under
- * the terms of the GNU General Public License version 2 as published by the
- * Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed WITHOUT ANY WARRANTY; even without the implied
- * WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program (see gnu-gpl v2.txt). If not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
- * visit the Free Software Foundation web page, http://www.fsf.org.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
@@ -33,11 +31,16 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.opengis.wps.x20.BoundingBoxDataDocument.BoundingBoxData;
 import net.opengis.wps.x20.DataDocument;
+import net.opengis.wps.x20.DataDocument.Data;
 import net.opengis.wps.x20.DataInputType;
 import net.opengis.wps.x20.DataTransmissionModeType;
 import net.opengis.wps.x20.ExecuteDocument;
 import net.opengis.wps.x20.ExecuteRequestType;
+import net.opengis.wps.x20.LiteralValueDocument;
+import net.opengis.wps.x20.LiteralValueDocument.LiteralValue;
 import net.opengis.wps.x20.OutputDefinitionType;
 import net.opengis.wps.x20.ReferenceType;
 import org.apache.xmlbeans.XmlObject;
@@ -61,6 +64,7 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
         addDeserializer(DataInputType.class, new DataInputTypeDeserializer());
         addDeserializer(ReferenceType.class, new ReferenceTypeDeserializer());
         addDeserializer(DataDocument.Data.class, new DataTypeSerializer());
+        addDeserializer(LiteralValueDocument.class, new LiteralValueDocumentSerializer());
         this.mapper = mapper;
     }
 
@@ -249,10 +253,20 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
                 instance.setReference(mapper
                         .readValue(node.get("Reference").traverse(), ReferenceType.class));
             }
-            if (node.has("Data")) {
+            if (node.has("ComplexData")) {
                 instance.setData(mapper
-                        .readValue(node.get("Data").traverse(), DataDocument.Data.class));
+                        .readValue(node.get("ComplexData").traverse(), DataDocument.Data.class));
             }
+            if (node.has("LiteralData")) {
+            	Data data = instance.addNewData();
+            	data.set(mapper
+                        .readValue(node.get("LiteralData").traverse(), LiteralValueDocument.class));
+            }
+//            if (node.has("BoundingBoxData")) {
+//            	Data data = instance.addNewData();
+//            	data.set(mapper
+//                        .readValue(node.get("BoundingBoxData").traverse(), BoundingBoxData.class));
+//            }
             if (node.has("Input")) {
                 instance.setInputArray(readArrayValues("Input", node, DataInputType.class, new TypeReference<List<DataInputType>>() {
                 }));
@@ -260,6 +274,22 @@ public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
         }
     }
 
+    private static final class LiteralValueDocumentSerializer extends AbstractWPSDeserializer<LiteralValueDocument>{
+
+		@Override
+		public LiteralValueDocument getInstance() {
+			return LiteralValueDocument.Factory.newInstance(XMLBeansHelper.getWPSXmlOptions());
+		}
+
+		@Override
+		public void deserialize(JsonParser jp, JsonNode node, LiteralValueDocument instance)
+				throws IOException, JsonProcessingException {
+            if (node.has("_text")) {
+                instance.addNewLiteralValue().set(getAsXmlString("_text", node));
+            }
+		}    	
+    }
+    
     private static final class ReferenceTypeDeserializer extends AbstractWPSDeserializer<ReferenceType> {
 
         @Override

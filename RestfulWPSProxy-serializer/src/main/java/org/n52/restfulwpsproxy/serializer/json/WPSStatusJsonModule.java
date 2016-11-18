@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016
- * by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -8,18 +7,17 @@
  * 48155 Muenster, Germany
  * info@52north.org
  *
- * This program is free software; you can redistribute and/or modify it under
- * the terms of the GNU General Public License version 2 as published by the
- * Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed WITHOUT ANY WARRANTY; even without the implied
- * WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program (see gnu-gpl v2.txt). If not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
- * visit the Free Software Foundation web page, http://www.fsf.org.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
@@ -40,7 +38,9 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
     private static final String STATUS_INFO = "StatusInfo";
     private static final String PROGRESS = "Progress";
     private static final String OUTPUT = "Output";
+    private static final String EXCEPTION = "Exception";
     private static final String SUCCEEDED = "Succeeded";
+    private static final Object FAILED = "Failed";
     private static final String STATUS = "Status";
     private static final String JOB_ID = "JobID";
 
@@ -80,7 +80,7 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
 
     private static final class StatusInfoWrapperSerializer extends JsonSerializer<StatusInfoWrapperWithOutput> {
 
-        @Override
+		@Override
         public void serialize(StatusInfoWrapperWithOutput t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             StatusInfoDocument.StatusInfo statusInfo = t.getStatusInfoDocument().getStatusInfo();
 
@@ -90,8 +90,10 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
             jg.writeStringField(STATUS, statusInfo.getStatus());
             if (statusInfo.getStatus().equals(SUCCEEDED)) {
                 jg.writeStringField(OUTPUT, t.getOutputUrl());
-            } else {
-                jg.writeNumberField(PROGRESS, statusInfo.getPercentCompleted());
+            } else if(statusInfo.getStatus().equals(FAILED)) {
+                jg.writeStringField(EXCEPTION, t.getOutputUrl());//TODO build getresultURL
+            }else{
+                jg.writeNumberField(PROGRESS, statusInfo.getPercentCompleted());            	
             }
             jg.writeEndObject();
             jg.writeEndObject();

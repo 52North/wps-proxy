@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://org/n52/restfulwpsproxy/webapp/soap/gen/service" xmlns:message="http://org/n52/restfulwpsproxy/webapp/soap/gen/message" targetNamespace="http://org/n52/restfulwpsproxy/webapp/soap/gen/service" elementFormDefault="qualified">  
+    <xsd:import namespace="http://org/n52/restfulwpsproxy/webapp/soap/gen/message" schemaLocation="WPSMessage.xsd"/> 
+    <xsd:element name="WPSOperationRequest"> 
+        <xsd:complexType>  
+            <xsd:sequence>  
+                <xsd:element name="wpsRequest" type="message:WPSRequest"/>  
+            </xsd:sequence>  
+        </xsd:complexType>  
+    </xsd:element>
+    <xsd:element name="WPSOperationResponse"> 
+        <xsd:complexType>  
+            <xsd:sequence>  
+                <xsd:element name="wpsResponse" type="message:WPSResponse"/>  
+            </xsd:sequence>  
+        </xsd:complexType>  
+    </xsd:element>
+</xsd:schema>

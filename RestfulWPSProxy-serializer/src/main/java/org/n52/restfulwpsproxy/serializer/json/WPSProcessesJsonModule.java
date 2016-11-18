@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016
- * by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -8,18 +7,17 @@
  * 48155 Muenster, Germany
  * info@52north.org
  *
- * This program is free software; you can redistribute and/or modify it under
- * the terms of the GNU General Public License version 2 as published by the
- * Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed WITHOUT ANY WARRANTY; even without the implied
- * WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program (see gnu-gpl v2.txt). If not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
- * visit the Free Software Foundation web page, http://www.fsf.org.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
@@ -28,6 +26,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
+
+import org.n52.restfulwpsproxy.util.EndpointUtil;
+
 import net.opengis.ows.x20.DomainMetadataType;
 import net.opengis.wps.x20.DataDescriptionType;
 import net.opengis.wps.x20.FormatDocument;
@@ -69,6 +70,7 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
     private static final String ALLOWED_VALUES = "AllowedValues";
     private static final String ANY_VALUE = "AnyValue";
     private static final String _REFERENCE = "_reference";
+    private static final String EXECUTE_URL = "execute-url";
 
     /**
      * Constructor.
@@ -123,6 +125,7 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
             jg.writeStringField(_PROCESS_VERSION, t.getProcessVersion());
             jg.writeStringField(_JOB_CONTROL_OPTIONS, t.getJobControlOptions().get(0).toString());
             jg.writeStringField(_OUTPUT_TRANSMISSION, t.getOutputTransmission().get(0).toString());
+            jg.writeStringField(EXECUTE_URL, EndpointUtil.PROXYBASEURL + "processes/" + t.getProcess().getIdentifier().getStringValue() + "/jobs");
             jg.writeEndObject();
         }
 
@@ -219,9 +222,9 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
             jg.writeStartObject();
             jg.writeStringField(_DEFAULT, "" + t.getDefault());
             jg.writeStringField(_MIME_TYPE, t.getMimeType());
-            jg.writeStringField(_ENCODING, t.getEncoding());
-            jg.writeStringField(_SCHEMA, t.getSchema());
-            jg.writeStringField(_MAXIMUM_MEGABYTES, toStringOrNull(t.getMaximumMegabytes()));
+            writeStringFieldIfNotNull(jg, _ENCODING, t.getEncoding());
+            writeStringFieldIfNotNull(jg, _SCHEMA, t.getSchema());
+            writeStringFieldIfNotNull(jg, _MAXIMUM_MEGABYTES, t.getMaximumMegabytes());
             jg.writeEndObject();
         }
 
@@ -237,7 +240,8 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
         public void serialize(LiteralDataType.LiteralDataDomain t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
             jg.writeStringField(ANY_VALUE, t.getAnyValue() == null ? null : "");
-            jg.writeStringField(ALLOWED_VALUES, t.getAllowedValues() == null ? null : "");
+//            jg.writeStringField(ALLOWED_VALUES, t.getAllowedValues() == null ? null : "");
+//            writeStringFieldIfNotNull(jg, ALLOWED_VALUES, t.getAllowedValues());//TODO implement serializer
             jg.writeObjectField(DATA_TYPE, t.getDataType());
             jg.writeEndObject();
         }

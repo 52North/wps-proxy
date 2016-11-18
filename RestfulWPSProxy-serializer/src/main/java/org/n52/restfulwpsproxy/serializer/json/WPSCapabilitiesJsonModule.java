@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016
- * by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -8,18 +7,17 @@
  * 48155 Muenster, Germany
  * info@52north.org
  *
- * This program is free software; you can redistribute and/or modify it under
- * the terms of the GNU General Public License version 2 as published by the
- * Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed WITHOUT ANY WARRANTY; even without the implied
- * WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program (see gnu-gpl v2.txt). If not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
- * visit the Free Software Foundation web page, http://www.fsf.org.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
@@ -46,7 +44,7 @@ import org.n52.restfulwpsproxy.util.EndpointUtil;
  *
  * @author dewall
  */
-public class WPSCapabilitiesJsonModule extends SimpleModule {
+public class WPSCapabilitiesJsonModule extends AbstractWPSJsonModule {
 
     private static final String _VERSION = "_version";
     private static final String _SERVICE = "_service";
@@ -128,12 +126,12 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         public void serialize(ServiceIdentificationDocument.ServiceIdentification si,
                 JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(TITLE, si.getTitleArray(0).getStringValue());
-            jg.writeStringField(A_ABSTRACT, si.getAbstractArray(0).getStringValue());
+            writeStringFieldIfNotNull(jg, TITLE, si.getTitleArray(0).getStringValue());
+            writeStringFieldIfNotNull(jg, A_ABSTRACT, si.getAbstractArray(0).getStringValue());
             jg.writeStringField(SERVICE_TYPE, si.getServiceType().getStringValue());
-            jg.writeStringField(SERVICE_TYPE_VERSION, si.getServiceTypeVersionArray(0));
-            jg.writeStringField(FEES, si.getFees());
-            jg.writeStringField(ACCESS_CONSTRAINTS, si.getAccessConstraintsArray(0));
+            writeArrayOfStrings(SERVICE_TYPE_VERSION, si.getServiceTypeVersionArray(), jg);
+            writeStringFieldIfNotNull(jg, FEES, si.getFees());
+            writeStringFieldIfNotNull(jg, ACCESS_CONSTRAINTS, si.getAccessConstraintsArray(0));
             jg.writeEndObject();
         }
 
@@ -165,10 +163,10 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         @Override
         public void serialize(OnlineResourceType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(TITLE, t.getTitle());
-            jg.writeStringField(H_REF, t.getHref());
-            jg.writeStringField(ROLE, t.getRole());
-            jg.writeStringField(ARCROLE, t.getArcrole());
+            writeStringFieldIfNotNull(jg, TITLE, t.getTitle());
+            writeStringFieldIfNotNull(jg, H_REF, t.getHref());
+            writeStringFieldIfNotNull(jg, ROLE, t.getRole());
+            writeStringFieldIfNotNull(jg, ARCROLE, t.getArcrole());
             jg.writeEndObject();
         }
 
@@ -200,8 +198,8 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         @Override
         public void serialize(ContactType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(CONTACT_INSTRUCTIONS, t.getContactInstructions());
-            jg.writeObjectField(HOURS_OF_SERVICE, t.getHoursOfService());
+            writeStringFieldIfNotNull(jg, CONTACT_INSTRUCTIONS, t.getContactInstructions());
+            writeStringFieldIfNotNull(jg, HOURS_OF_SERVICE, t.getHoursOfService());
             // TODO add others
             jg.writeEndObject();
         }
@@ -218,12 +216,12 @@ public class WPSCapabilitiesJsonModule extends SimpleModule {
         @Override
         public void serialize(AddressType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            jg.writeStringField(DELIVERY_POINT, t.getDeliveryPointArray(0));
-            jg.writeStringField(CITY, t.getCity());
-            jg.writeStringField(ADMINISTRATIVE_AREA, t.getAdministrativeArea());
-            jg.writeStringField(PORTAL_CODE, t.getPostalCode());
-            jg.writeStringField(COUNTRY, t.getCountry());
-            jg.writeStringField(ELECTRONIC_MAIL_ADDRESS, t.getElectronicMailAddressArray(0));
+            writeStringFieldIfNotNull(jg, DELIVERY_POINT, t.getDeliveryPointArray(0));
+            writeStringFieldIfNotNull(jg, CITY, t.getCity());
+            writeStringFieldIfNotNull(jg, ADMINISTRATIVE_AREA, t.getAdministrativeArea());
+            writeStringFieldIfNotNull(jg, PORTAL_CODE, t.getPostalCode());
+            writeStringFieldIfNotNull(jg, COUNTRY, t.getCountry());
+            writeStringFieldIfNotNull(jg, ELECTRONIC_MAIL_ADDRESS, t.getElectronicMailAddressArray(0));
             jg.writeEndObject();
         }
 

@@ -21,10 +21,13 @@
  */
 package org.n52.restfulwpsproxy.wps;
 
-import net.opengis.wps.x20.CapabilitiesDocument;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -32,30 +35,42 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author dewall
  */
-public class CapabilitiesClient extends AbstractWPSClient {
+public class GetJobsClient extends AbstractWPSClient {
 
-    private static final String REQUEST_GET_CAPABILITIES = "GetCapabilities";
+	private Map<String, List<String>> processIdJobIdsMap;
 
     /**
      * Constructor.
      *
-     * @param baseUrl
+     * @param baseUrl baseUrl des WPS services.
      * @param restTemplate
      */
-    public CapabilitiesClient(String baseUrl, RestTemplate restTemplate) {
+    public GetJobsClient(String baseUrl, RestTemplate restTemplate) {
         super(baseUrl, restTemplate);
+        processIdJobIdsMap = new HashMap<>();
     }
 
-    public CapabilitiesDocument get() {
-        HttpEntity requestEntity = new HttpEntity(null, headers);
+    public String[] getJobIds(String processId) {
 
-        ResponseEntity<CapabilitiesDocument> capabilities = restTemplate.exchange(
-                new RequestUrlBuilder(REQUEST_GET_CAPABILITIES).build(),
-                HttpMethod.GET,
-                requestEntity,
-                CapabilitiesDocument.class);
-
-        return capabilities.getBody();
+    	List<String> processIdList = processIdJobIdsMap.get(processId);
+    	
+    	String[] processIdArray = new String[]{};
+    	
+    	if(processIdList != null){
+    		processIdArray = processIdList.toArray(processIdArray);
+    	}
+    	
+        return processIdArray;
+    }
+    
+    public void addJobId(String processId, String jobId){
+    	if(processIdJobIdsMap.containsKey(processId)){
+    		processIdJobIdsMap.get(processId).add(jobId);
+    	}else{
+    		List<String> newJobIdList = new ArrayList<>();
+    		newJobIdList.add(jobId);
+    		processIdJobIdsMap.put(processId, newJobIdList);
+    	}
     }
 
 }

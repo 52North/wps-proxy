@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016
- * by 52 North Initiative for Geospatial Open Source Software GmbH
+ * Copyright (C) 2016 by 52 North Initiative for Geospatial Open Source Software GmbH
  *
  * Contact: Andreas Wytzisk
  * 52 North Initiative for Geospatial Open Source Software GmbH
@@ -8,18 +7,17 @@
  * 48155 Muenster, Germany
  * info@52north.org
  *
- * This program is free software; you can redistribute and/or modify it under
- * the terms of the GNU General Public License version 2 as published by the
- * Free Software Foundation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed WITHOUT ANY WARRANTY; even without the implied
- * WARRANTY OF MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License along with
- * this program (see gnu-gpl v2.txt). If not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA or
- * visit the Free Software Foundation web page, http://www.fsf.org.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
@@ -34,6 +32,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import net.opengis.wps.x20.DataDocument;
 import net.opengis.wps.x20.DataOutputType;
+import net.opengis.wps.x20.LiteralValueDocument;
+import net.opengis.wps.x20.LiteralValueDocument.LiteralValue;
 import net.opengis.wps.x20.ReferenceType;
 import net.opengis.wps.x20.ResultDocument;
 import static org.n52.restfulwpsproxy.serializer.json.AbstractWPSJsonModule.toStringOrNull;
@@ -52,7 +52,8 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
     private static final String OUTPUT = "Output";
     private static final String EXPIRATION_DATE = "ExpirationDate";
     private static final String JOB_ID = "JobID";
-    private static final String DATA = "Data";
+    private static final String COMPLEXDATA = "ComplexData";
+    private static final String LITERALDATA = "LiteralData";
     private static final String REFERENCE = "Reference";
     private static final String _HREF = "_href";
     private static final String ID = "ID";
@@ -66,6 +67,7 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         addSerializer(new ResultSerializer());
         addSerializer(new DataOutputTypeSerialzer());
         addSerializer(new DataSerializer());
+        addSerializer(new LiteralValueSerializer());
         addSerializer(new ReferenceSerializer());
     }
 
@@ -90,7 +92,7 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         public void serialize(ResultDocument.Result t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
             jg.writeStringField(JOB_ID, t.getJobID());
-            jg.writeStringField(EXPIRATION_DATE, toStringOrNull(t.getExpirationDate()));
+            writeStringFieldIfNotNull(jg, EXPIRATION_DATE, t.getExpirationDate());
             writeArrayOfObjects(OUTPUT, t.getOutputArray(), jg);
             jg.writeEndObject();
         }
@@ -107,9 +109,28 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
         public void serialize(DataOutputType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
             jg.writeObjectField(ID, t.getId());
-            jg.writeObjectField(REFERENCE, t.getReference());
-            jg.writeObjectField(OUTPUT, t.getOutput());
-            jg.writeObjectField(DATA, t.getData());
+            writeObjectFieldIfNotNull(jg, REFERENCE, t.getReference());
+            writeObjectFieldIfNotNull(jg, OUTPUT, t.getOutput());
+            
+            if(!t.isSetData()){
+                jg.writeEndObject();
+            	return;
+            }
+            
+            NodeList candidateNodes = t.getData().getDomNode().getChildNodes();
+            Node complexDataNode = candidateNodes.getLength() > 1 ? candidateNodes.item(1) : candidateNodes.item(0);
+            
+        	try {
+        		LiteralValueDocument literalValueDocument = LiteralValueDocument.Factory.parse(complexDataNode);
+        		writeObjectFieldIfNotNull(jg, LITERALDATA, literalValueDocument.getLiteralValue());
+                jg.writeEndObject();
+        		return;
+        		
+			} catch (Exception e) {
+				Logger.getLogger(WPSGetResultsJsonModule.class.getName()).log(Level.FINE, null, e);
+			}
+            
+            writeObjectFieldIfNotNull(jg, COMPLEXDATA, t.getData());
             jg.writeEndObject();
         }
 
@@ -123,14 +144,16 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
 
         @Override
         public void serialize(DataDocument.Data t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
-            try {
+        	
+        	try {
                 jg.writeStartObject();
-                jg.writeStringField(_MIME_TYPE, t.getMimeType());
-                jg.writeStringField(_ENCODING, t.getEncoding());
-                jg.writeStringField(_SCHEMA, t.getSchema());
-
+                writeStringFieldIfNotNull(jg, _MIME_TYPE, t.getMimeType());
+                writeStringFieldIfNotNull(jg, _ENCODING, t.getEncoding());
+                writeStringFieldIfNotNull(jg, _SCHEMA, t.getSchema());
+                
                 NodeList candidateNodes = t.getDomNode().getChildNodes();
                 Node complexDataNode = candidateNodes.getLength() > 1 ? candidateNodes.item(1) : candidateNodes.item(0);
+                
                 jg.writeStringField(_TEXT, XMLBeansHelper.nodeToString(complexDataNode));
 
                 jg.writeEndObject();
@@ -144,6 +167,22 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
             return DataDocument.Data.class;
         }
     }
+    
+	private static final class LiteralValueSerializer extends JsonSerializer<LiteralValue> {
+
+		@Override
+		public void serialize(LiteralValue t, JsonGenerator jg, SerializerProvider sp)
+				throws IOException, JsonProcessingException {
+			jg.writeStartObject();
+			jg.writeStringField(_TEXT, t.getStringValue());
+			jg.writeEndObject();
+		}
+
+		@Override
+		public Class<LiteralValue> handledType() {
+			return LiteralValue.class;
+		}
+	}
 
     private static final class ReferenceSerializer extends JsonSerializer<ReferenceType> {
 
@@ -154,8 +193,8 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
 
             jg.writeStartObject();
             jg.writeStringField(_MIME_TYPE, r.getMimeType());
-            jg.writeStringField(_ENCODING, r.getEncoding());
-            jg.writeStringField(_SCHEMA, r.getSchema());
+            writeStringFieldIfNotNull(jg, _ENCODING, r.getEncoding());
+            writeStringFieldIfNotNull(jg, _SCHEMA, r.getSchema());
             jg.writeStringField(_HREF, r.getHref());
 
             jg.writeEndObject();
