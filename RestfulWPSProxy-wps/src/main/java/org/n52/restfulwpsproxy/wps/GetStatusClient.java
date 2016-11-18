@@ -49,7 +49,7 @@ public class GetStatusClient extends AbstractWPSClient {
     }
 
     public StatusInfoDocument getStatusInfo(String processId, String jobId) {
-        HttpEntity requestEntity = new HttpEntity(null, headers);
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(null, headers);
 
         ResponseEntity<StatusInfoDocument> statusInfo = restTemplate
                 .exchange(new RequestUrlBuilder(GET_STATUS).jobID(jobId).build(),
@@ -62,7 +62,7 @@ public class GetStatusClient extends AbstractWPSClient {
     }
 
     public ResultDocument getResults(String processId, String jobId) {
-        HttpEntity requestEntity = new HttpEntity(null, headers);
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(null, headers);
 
         ResponseEntity<ResultDocument> resultDocument = restTemplate
                 .exchange(
