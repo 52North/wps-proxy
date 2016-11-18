@@ -112,6 +112,11 @@ public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
             writeObjectFieldIfNotNull(jg, REFERENCE, t.getReference());
             writeObjectFieldIfNotNull(jg, OUTPUT, t.getOutput());
             
+            if(!t.isSetData()){
+                jg.writeEndObject();
+            	return;
+            }
+            
             NodeList candidateNodes = t.getData().getDomNode().getChildNodes();
             Node complexDataNode = candidateNodes.getLength() > 1 ? candidateNodes.item(1) : candidateNodes.item(0);
             
