@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.opengis.ows.x20.ExceptionReportDocument;
 import net.opengis.wps.x20.CapabilitiesDocument;
 import net.opengis.wps.x20.ExecuteDocument;
 import net.opengis.wps.x20.ProcessOfferingsDocument;
@@ -63,6 +65,7 @@ public class WPSBeansMessageConverter extends AbstractHttpMessageConverter<XmlOb
             add(ExecuteDocumentImpl.class);
             add(StatusInfoDocument.class);
             add(ResultDocument.class);
+            add(ExceptionReportDocument.class);
         }
     };
 
@@ -94,6 +97,8 @@ public class WPSBeansMessageConverter extends AbstractHttpMessageConverter<XmlOb
                 return StatusInfoDocument.Factory.parse(him.getBody());
             } else if (type == ResultDocument.class) {
                 return ResultDocument.Factory.parse(him.getBody());
+            } else if (type == ExceptionReportDocument.class) {
+                return ExceptionReportDocument.Factory.parse(him.getBody());
             }
         } catch (XmlException ex) {
             Logger.getLogger(WPSBeansMessageConverter.class.getName()).log(Level.SEVERE, null, ex);

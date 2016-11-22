@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.opengis.ows.x20.ExceptionReportDocument;
 import net.opengis.wps.x20.ResultDocument;
 import net.opengis.wps.x20.StatusInfoDocument;
 
@@ -70,7 +71,7 @@ public class JobController {
     public ResponseEntity<StatusInfoWrapperWithOutput> getStatus(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId, HttpServletRequest request) {
         StatusInfoDocument statusInfo = client.getStatusInfo(processId, jobId);
         return ResponseEntity.ok(new WPSStatusJsonModule.StatusInfoWrapperWithOutput(
-                request.getRequestURL().append("/outputs").toString(), statusInfo));
+                request.getRequestURL().toString(), statusInfo));
     }
 
     @RequestMapping(value = "/{jobId:.+}", method = RequestMethod.DELETE)
@@ -81,6 +82,11 @@ public class JobController {
     @RequestMapping(value = "/{jobId:.+}/outputs", method = RequestMethod.GET)
     public ResponseEntity<ResultDocument> getOutputs(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId, HttpServletRequest request) {
         return ResponseEntity.ok(client.getResults(processId, jobId));
+    }
+    
+    @RequestMapping(value = "/{jobId:.+}/exceptions", method = RequestMethod.GET)
+    public ResponseEntity<ExceptionReportDocument> getExceptions(@PathVariable("processId") String processId, @PathVariable("jobId") String jobId, HttpServletRequest request) {
+    	return ResponseEntity.ok(client.getExceptions(processId, jobId));
     }
 
 }
