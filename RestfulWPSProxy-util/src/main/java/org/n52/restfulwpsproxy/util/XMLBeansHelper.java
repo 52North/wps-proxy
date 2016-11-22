@@ -48,7 +48,12 @@ public class XMLBeansHelper {
     public static final String NS_XSI_PREFIX = "xsi";
 
     private static Map<String, String> PREFIXES = new HashMap<String, String>() {
-        {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 5419317972129227659L;
+
+		{
             put(NS_WPS_2_0, NS_WPS_PREFIX);
             put(NS_OWS_2_0, NS_OWS_PREFIX);
             put(NS_XSI, NS_XSI_PREFIX);

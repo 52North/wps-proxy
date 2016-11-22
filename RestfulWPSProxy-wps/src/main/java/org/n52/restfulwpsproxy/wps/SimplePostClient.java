@@ -54,7 +54,7 @@ public class SimplePostClient extends AbstractWPSClient {
     }
 
     public String performPostRequest(Object xmlRequest) throws TransformerFactoryConfigurationError,TransformerException {
-        HttpEntity requestEntity = new HttpEntity(XMLBeansHelper.nodeToString((Node) xmlRequest), headers);
+        HttpEntity<String> requestEntity = new HttpEntity<String>(XMLBeansHelper.nodeToString((Node) xmlRequest), headers);
         ResponseEntity<String> exchange = restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, String.class);
         return exchange.getBody();
     }

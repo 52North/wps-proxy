@@ -35,7 +35,11 @@ import net.opengis.wps.x20.StatusInfoDocument;
  */
 public class WPSStatusJsonModule extends AbstractWPSJsonModule {
 
-    private static final String STATUS_INFO = "StatusInfo";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4791629776470211329L;
+	private static final String STATUS_INFO = "StatusInfo";
     private static final String PROGRESS = "Progress";
     private static final String OUTPUT = "Output";
     private static final String EXCEPTION = "Exception";

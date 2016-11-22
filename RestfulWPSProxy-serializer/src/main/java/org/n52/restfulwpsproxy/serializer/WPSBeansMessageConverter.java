@@ -51,7 +51,12 @@ import org.n52.restfulwpsproxy.util.XMLBeansHelper;
 public class WPSBeansMessageConverter extends AbstractHttpMessageConverter<XmlObject> {
 
     private static final List<Class<? extends XmlObject>> supportedTypes = new ArrayList<Class<? extends XmlObject>>() {
-        {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -3329873321870335320L;
+
+		{
             add(CapabilitiesDocument.class);
             add(ProcessOfferingsDocument.class);
             add(ExecuteDocument.class);

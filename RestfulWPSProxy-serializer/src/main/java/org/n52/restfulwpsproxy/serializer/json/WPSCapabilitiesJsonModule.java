@@ -21,12 +21,15 @@
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
+import java.io.IOException;
+
+import org.n52.restfulwpsproxy.util.EndpointUtil;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import java.io.IOException;
+
 import net.opengis.ows.x20.AddressType;
 import net.opengis.ows.x20.ContactType;
 import net.opengis.ows.x20.OnlineResourceType;
@@ -37,7 +40,6 @@ import net.opengis.wps.x20.CapabilitiesDocument;
 import net.opengis.wps.x20.ContentsDocument;
 import net.opengis.wps.x20.ProcessSummaryType;
 import net.opengis.wps.x20.WPSCapabilitiesType;
-import org.n52.restfulwpsproxy.util.EndpointUtil;
 
 /**
  * TODO JavaDoc
@@ -46,7 +48,11 @@ import org.n52.restfulwpsproxy.util.EndpointUtil;
  */
 public class WPSCapabilitiesJsonModule extends AbstractWPSJsonModule {
 
-    private static final String _VERSION = "_version";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2700883482656842894L;
+	private static final String _VERSION = "_version";
     private static final String _SERVICE = "_service";
     private static final String CONTENTS = "Contents";
     private static final String SERVICE_PROVIDER = "ServiceProvider";

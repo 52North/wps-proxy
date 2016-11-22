@@ -21,13 +21,12 @@
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.io.IOException;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import java.io.IOException;
-import java.util.List;
 
 /**
  *
@@ -35,7 +34,12 @@ import java.util.List;
  */
 public abstract class AbstractWPSJsonModule extends SimpleModule {
 
-    protected String getFirstArrayElementAsStringIfExist(List arrayList) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1294800523104618214L;
+
+	protected String getFirstArrayElementAsStringIfExist(List<?> arrayList) {
         if (arrayList != null && arrayList.size() > 0) {
             return arrayList.get(0).toString();
         }

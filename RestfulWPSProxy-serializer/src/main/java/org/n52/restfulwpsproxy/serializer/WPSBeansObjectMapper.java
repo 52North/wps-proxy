@@ -38,7 +38,12 @@ import org.n52.restfulwpsproxy.serializer.json.WPSJobsJsonModule;
  */
 public class WPSBeansObjectMapper extends ObjectMapper {
     
-    public WPSBeansObjectMapper() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1724900719528809107L;
+
+	public WPSBeansObjectMapper() {
         this.registerModule(new WPSCapabilitiesJsonModule());
         this.registerModule(new WPSProcessesJsonModule());
         this.registerModule(new WPSStatusJsonModule());
