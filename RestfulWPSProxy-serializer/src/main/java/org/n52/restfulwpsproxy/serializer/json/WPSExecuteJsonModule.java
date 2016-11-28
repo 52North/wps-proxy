@@ -55,7 +55,11 @@ import org.n52.restfulwpsproxy.util.XMLBeansHelper;
  */
 public class WPSExecuteJsonModule extends AbstractWPSJsonModule {
 
-    private static WPSBeansObjectMapper mapper;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6001780470195508503L;
+	private static WPSBeansObjectMapper mapper;
 
     public WPSExecuteJsonModule(WPSBeansObjectMapper mapper) {
         addDeserializer(ExecuteDocument.class, new ExecuteDeserializer());

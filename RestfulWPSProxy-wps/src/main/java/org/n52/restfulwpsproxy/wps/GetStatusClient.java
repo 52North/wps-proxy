@@ -21,6 +21,7 @@
  */
 package org.n52.restfulwpsproxy.wps;
 
+import net.opengis.ows.x20.ExceptionReportDocument;
 import net.opengis.wps.x20.ResultDocument;
 import net.opengis.wps.x20.StatusInfoDocument;
 import org.springframework.http.HttpEntity;
@@ -74,5 +75,19 @@ public class GetStatusClient extends AbstractWPSClient {
 
         return resultDocument.getBody();
     }
+
+	public ExceptionReportDocument getExceptions(String processId, String jobId) {
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(null, headers);
+
+        ResponseEntity<ExceptionReportDocument> resultDocument = restTemplate
+                .exchange(
+                        new RequestUrlBuilder(GET_RESULT).jobID(jobId).build(),
+                        HttpMethod.GET,
+                        requestEntity,
+                        ExceptionReportDocument.class
+                );
+
+        return resultDocument.getBody();
+	}
 
 }

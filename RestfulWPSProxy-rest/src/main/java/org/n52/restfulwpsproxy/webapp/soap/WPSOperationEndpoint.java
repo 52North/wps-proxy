@@ -30,9 +30,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlObject;
-import org.apache.xmlbeans.XmlOptions;
 import org.n52.restfulwpsproxy.webapp.soap.gen.message.WPSResponse;
 import org.n52.restfulwpsproxy.webapp.soap.gen.service.WPSOperationRequest;
 import org.n52.restfulwpsproxy.webapp.soap.gen.service.WPSOperationResponse;

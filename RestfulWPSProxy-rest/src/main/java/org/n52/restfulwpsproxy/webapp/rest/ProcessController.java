@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletRequest;
 import net.opengis.wps.x20.ExecuteDocument;
 import net.opengis.wps.x20.ExecuteRequestType;
+import net.opengis.wps.x20.ProcessOfferingsDocument.ProcessOfferings;
 import net.opengis.wps.x20.ResultDocument;
 import net.opengis.wps.x20.StatusInfoDocument;
 import org.n52.restfulwpsproxy.wps.CapabilitiesClient;
@@ -66,7 +67,7 @@ public class ProcessController {
     }
 
     @RequestMapping(value = "/{processId:.+}", method = RequestMethod.GET)
-    public ResponseEntity describeProcess(
+    public ResponseEntity<ProcessOfferings> describeProcess(
             @PathVariable("processId") String processId,
             HttpServletRequest request) throws URISyntaxException {
         return ResponseEntity.ok(processesClient
@@ -75,7 +76,7 @@ public class ProcessController {
     }
 
     @RequestMapping(value = "/{processId:.+}/jobs", method = RequestMethod.POST)
-    public ResponseEntity execute(
+    public ResponseEntity<?> execute(
             @PathVariable("processId") String processId,
             @RequestParam(value = "sync-execute", required = false, defaultValue = "false") boolean syncExecute,
             @RequestBody ExecuteDocument executeDocument,

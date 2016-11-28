@@ -47,7 +47,7 @@ public class CapabilitiesClient extends AbstractWPSClient {
     }
 
     public CapabilitiesDocument get() {
-        HttpEntity requestEntity = new HttpEntity(null, headers);
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(null, headers);
 
         ResponseEntity<CapabilitiesDocument> capabilities = restTemplate.exchange(
                 new RequestUrlBuilder(REQUEST_GET_CAPABILITIES).build(),

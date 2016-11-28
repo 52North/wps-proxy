@@ -21,14 +21,15 @@
  */
 package org.n52.restfulwpsproxy.wps;
 
-import java.net.URI;
 import java.net.URISyntaxException;
-import net.opengis.wps.x20.ExecuteDocument;
-import net.opengis.wps.x20.ResultDocument;
-import net.opengis.wps.x20.StatusInfoDocument;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+
+import net.opengis.wps.x20.ExecuteDocument;
+import net.opengis.wps.x20.ResultDocument;
+import net.opengis.wps.x20.StatusInfoDocument;
 
 /**
  * TODO JavaDoc
@@ -48,17 +49,17 @@ public class ExecuteClient extends AbstractWPSClient {
     }
 
     public StatusInfoDocument asyncExecute(String processId, ExecuteDocument executeDocument) throws URISyntaxException {
-        HttpEntity requestEntity = new HttpEntity(executeDocument, headers);
+        HttpEntity<ExecuteDocument> requestEntity = new HttpEntity<ExecuteDocument>(executeDocument, headers);
         return restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, StatusInfoDocument.class).getBody();
     }
 
     public StatusInfoDocument asyncExecute(String processId, String executeDocument) {
-        HttpEntity requestEntity = new HttpEntity(executeDocument, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<String>(executeDocument, headers);
         return restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, StatusInfoDocument.class).getBody();
     }
 
     public ResultDocument syncExecute(String processId, ExecuteDocument executeDocument) throws URISyntaxException {
-        HttpEntity requestEntity = new HttpEntity(executeDocument, headers);
+        HttpEntity<ExecuteDocument> requestEntity = new HttpEntity<ExecuteDocument>(executeDocument, headers);
         return restTemplate.exchange(baseUrl, HttpMethod.POST, requestEntity, ResultDocument.class).getBody();
     }
 

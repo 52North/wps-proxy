@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.opengis.ows.x20.ExceptionReportDocument;
 import net.opengis.wps.x20.CapabilitiesDocument;
 import net.opengis.wps.x20.ExecuteDocument;
 import net.opengis.wps.x20.ProcessOfferingsDocument;
@@ -51,13 +53,19 @@ import org.n52.restfulwpsproxy.util.XMLBeansHelper;
 public class WPSBeansMessageConverter extends AbstractHttpMessageConverter<XmlObject> {
 
     private static final List<Class<? extends XmlObject>> supportedTypes = new ArrayList<Class<? extends XmlObject>>() {
-        {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -3329873321870335320L;
+
+		{
             add(CapabilitiesDocument.class);
             add(ProcessOfferingsDocument.class);
             add(ExecuteDocument.class);
             add(ExecuteDocumentImpl.class);
             add(StatusInfoDocument.class);
             add(ResultDocument.class);
+            add(ExceptionReportDocument.class);
         }
     };
 
@@ -89,6 +97,8 @@ public class WPSBeansMessageConverter extends AbstractHttpMessageConverter<XmlOb
                 return StatusInfoDocument.Factory.parse(him.getBody());
             } else if (type == ResultDocument.class) {
                 return ResultDocument.Factory.parse(him.getBody());
+            } else if (type == ExceptionReportDocument.class) {
+                return ExceptionReportDocument.Factory.parse(him.getBody());
             }
         } catch (XmlException ex) {
             Logger.getLogger(WPSBeansMessageConverter.class.getName()).log(Level.SEVERE, null, ex);

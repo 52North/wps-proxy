@@ -26,6 +26,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
+
+import net.opengis.ows.x20.ExceptionReportDocument;
+import net.opengis.ows.x20.ExceptionReportDocument.ExceptionReport;
+import net.opengis.ows.x20.ExceptionType;
 import net.opengis.wps.x20.StatusInfoDocument;
 
 /**
@@ -35,7 +39,16 @@ import net.opengis.wps.x20.StatusInfoDocument;
  */
 public class WPSStatusJsonModule extends AbstractWPSJsonModule {
 
-    private static final String STATUS_INFO = "StatusInfo";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4791629776470211329L;
+	private static final String STATUS_INFO = "StatusInfo";
+	private static final String EXCEPTION_REPORT = "ExceptionReport";
+	private static final String EXCEPTIONS = "Exceptions";
+	private static final String EXCEPTION_CODDE = "Code";
+	private static final String EXCEPTION_TEXT = "Text";
+	private static final String EXCEPTION_LOCATOR = "Locator";
     private static final String PROGRESS = "Progress";
     private static final String OUTPUT = "Output";
     private static final String EXCEPTION = "Exception";
@@ -76,6 +89,9 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
         addSerializer(new StatusInfoDocSerializer());
         addSerializer(new StatusInfoSerializer());
         addSerializer(new StatusInfoWrapperSerializer());
+        addSerializer(new ExceptionReportDocSerializer());
+        addSerializer(new ExceptionReportSerializer());
+        addSerializer(new ExceptionTypeSerializer());
     }
 
     private static final class StatusInfoWrapperSerializer extends JsonSerializer<StatusInfoWrapperWithOutput> {
@@ -89,9 +105,9 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
             jg.writeStringField(JOB_ID, statusInfo.getJobID());
             jg.writeStringField(STATUS, statusInfo.getStatus());
             if (statusInfo.getStatus().equals(SUCCEEDED)) {
-                jg.writeStringField(OUTPUT, t.getOutputUrl());
+                jg.writeStringField(OUTPUT, t.getOutputUrl().concat("/outputs"));
             } else if(statusInfo.getStatus().equals(FAILED)) {
-                jg.writeStringField(EXCEPTION, t.getOutputUrl());//TODO build getresultURL
+                jg.writeStringField(EXCEPTIONS, t.getOutputUrl().concat("/exceptions"));
             }else{
                 jg.writeNumberField(PROGRESS, statusInfo.getPercentCompleted());            	
             }
@@ -134,6 +150,53 @@ public class WPSStatusJsonModule extends AbstractWPSJsonModule {
         @Override
         public Class<StatusInfoDocument.StatusInfo> handledType() {
             return StatusInfoDocument.StatusInfo.class;
+        }
+    }
+
+    private static final class ExceptionReportDocSerializer extends JsonSerializer<ExceptionReportDocument> {
+
+        @Override
+        public void serialize(ExceptionReportDocument t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
+            jg.writeStartObject();
+            jg.writeObjectField(EXCEPTION_REPORT, t.getExceptionReport());
+            jg.writeEndObject();
+        }
+
+        @Override
+        public Class<ExceptionReportDocument> handledType() {
+            return ExceptionReportDocument.class;
+        }
+    }
+    
+    private static final class ExceptionReportSerializer extends JsonSerializer<ExceptionReport> {
+
+        @Override
+        public void serialize(ExceptionReport t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
+            jg.writeStartObject();
+            writeArrayOfObjects(EXCEPTIONS, t.getExceptionArray(), jg);
+            jg.writeEndObject();
+        }
+
+        @Override
+        public Class<ExceptionReport> handledType() {
+            return ExceptionReport.class;
+        }
+    }
+    
+    private static final class ExceptionTypeSerializer extends JsonSerializer<ExceptionType> {
+
+        @Override
+        public void serialize(ExceptionType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
+            jg.writeStartObject();
+            jg.writeStringField(EXCEPTION_CODDE, t.getExceptionCode());
+            jg.writeStringField(EXCEPTION_LOCATOR, t.getLocator());
+            writeArrayOfObjects(EXCEPTION_TEXT, t.getExceptionTextArray(), jg);
+            jg.writeEndObject();
+        }
+
+        @Override
+        public Class<ExceptionType> handledType() {
+            return ExceptionType.class;
         }
     }
 }

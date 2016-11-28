@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.opengis.wps.x20.CapabilitiesDocument;
+import net.opengis.wps.x20.ContentsDocument.Contents;
+
 /**
  * TODO Java
  *
@@ -51,12 +54,12 @@ public class CapabilitiesController {
      */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity getCapabilities() {
+    public ResponseEntity<CapabilitiesDocument> getCapabilities() {
         return ResponseEntity.ok(client.get());
     }
 
     @RequestMapping(value = "/processes", method = RequestMethod.GET)
-    public ResponseEntity processSummaries() {
+    public ResponseEntity<Contents> processSummaries() {
         return ResponseEntity.ok(
                 client.get()
                 .getCapabilities()

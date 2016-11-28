@@ -46,7 +46,7 @@ public class ProcessesClient extends AbstractWPSClient {
     }
 
     public ProcessOfferingsDocument getProcessDescription(String processId) {
-        HttpEntity requestEntity = new HttpEntity(null, headers);
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(null, headers);
         return restTemplate.exchange(new RequestUrlBuilder(DESCRIBE_PROCESS)
                 .identifier(processId)
                 .build(),

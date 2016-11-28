@@ -21,25 +21,28 @@
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+import org.n52.restfulwpsproxy.util.XMLBeansHelper;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+
 import net.opengis.wps.x20.DataDocument;
 import net.opengis.wps.x20.DataOutputType;
 import net.opengis.wps.x20.LiteralValueDocument;
 import net.opengis.wps.x20.LiteralValueDocument.LiteralValue;
 import net.opengis.wps.x20.ReferenceType;
 import net.opengis.wps.x20.ResultDocument;
-import static org.n52.restfulwpsproxy.serializer.json.AbstractWPSJsonModule.toStringOrNull;
-import org.n52.restfulwpsproxy.util.XMLBeansHelper;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * TODO JavaDoc
@@ -48,7 +51,11 @@ import org.w3c.dom.NodeList;
  */
 public class WPSGetResultsJsonModule extends AbstractWPSJsonModule {
 
-    private static final String RESULT = "Result";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6287570557860169884L;
+	private static final String RESULT = "Result";
     private static final String OUTPUT = "Output";
     private static final String EXPIRATION_DATE = "ExpirationDate";
     private static final String JOB_ID = "JobID";

@@ -46,7 +46,11 @@ import net.opengis.wps.x20.ProcessOfferingsDocument;
  */
 public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
 
-    private static final String PROCESS_OFFERING = "ProcessOffering";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2097957550663121948L;
+	private static final String PROCESS_OFFERING = "ProcessOffering";
     private static final String _OUTPUT_TRANSMISSION = "_outputTransmission";
     private static final String _JOB_CONTROL_OPTIONS = "_jobControlOptions";
     private static final String _PROCESS_VERSION = "_processVersion";
