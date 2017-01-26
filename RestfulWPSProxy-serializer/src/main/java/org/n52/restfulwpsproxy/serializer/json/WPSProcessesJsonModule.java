@@ -21,13 +21,15 @@
  */
 package org.n52.restfulwpsproxy.serializer.json;
 
+import java.io.IOException;
+
+import org.n52.restfulwpsproxy.serializer.util.Utils;
+import org.n52.restfulwpsproxy.util.EndpointUtil;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
-
-import org.n52.restfulwpsproxy.util.EndpointUtil;
 
 import net.opengis.ows.x20.DomainMetadataType;
 import net.opengis.wps.x20.DataDescriptionType;
@@ -127,8 +129,8 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
             jg.writeStartObject();
             jg.writeObjectField(PROCESS, t.getProcess());
             jg.writeStringField(_PROCESS_VERSION, t.getProcessVersion());
-            jg.writeStringField(_JOB_CONTROL_OPTIONS, t.getJobControlOptions().get(0).toString());
-            jg.writeStringField(_OUTPUT_TRANSMISSION, t.getOutputTransmission().get(0).toString());
+            jg.writeStringField(_JOB_CONTROL_OPTIONS, Utils.getStringFromObjectList(t.getJobControlOptions()));
+            jg.writeStringField(_OUTPUT_TRANSMISSION, Utils.getStringFromObjectList(t.getOutputTransmission()));
             jg.writeStringField(EXECUTE_URL, EndpointUtil.PROXYBASEURL + "processes/" + t.getProcess().getIdentifier().getStringValue() + "/jobs");
             jg.writeEndObject();
         }
@@ -138,7 +140,7 @@ public class WPSProcessesJsonModule extends AbstractWPSJsonModule {
             return ProcessOfferingDocument.ProcessOffering.class;
         }
     }
-
+    
     private static final class ProcessDescriptionSerializer extends JsonSerializer<ProcessDescriptionType> {
 
         @Override

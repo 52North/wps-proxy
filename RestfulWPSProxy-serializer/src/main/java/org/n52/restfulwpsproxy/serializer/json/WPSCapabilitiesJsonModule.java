@@ -22,7 +22,9 @@
 package org.n52.restfulwpsproxy.serializer.json;
 
 import java.io.IOException;
+import java.util.Arrays;
 
+import org.n52.restfulwpsproxy.serializer.util.Utils;
 import org.n52.restfulwpsproxy.util.EndpointUtil;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -222,12 +224,12 @@ public class WPSCapabilitiesJsonModule extends AbstractWPSJsonModule {
         @Override
         public void serialize(AddressType t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
             jg.writeStartObject();
-            writeStringFieldIfNotNull(jg, DELIVERY_POINT, t.getDeliveryPointArray(0));
+            writeStringFieldIfNotNull(jg, DELIVERY_POINT, Utils.getStringFromObjectList(Arrays.asList(t.getDeliveryPointArray())));
             writeStringFieldIfNotNull(jg, CITY, t.getCity());
             writeStringFieldIfNotNull(jg, ADMINISTRATIVE_AREA, t.getAdministrativeArea());
             writeStringFieldIfNotNull(jg, PORTAL_CODE, t.getPostalCode());
             writeStringFieldIfNotNull(jg, COUNTRY, t.getCountry());
-            writeStringFieldIfNotNull(jg, ELECTRONIC_MAIL_ADDRESS, t.getElectronicMailAddressArray(0));
+            writeStringFieldIfNotNull(jg, ELECTRONIC_MAIL_ADDRESS, Utils.getStringFromObjectList(Arrays.asList(t.getElectronicMailAddressArray())));
             jg.writeEndObject();
         }
 
@@ -265,8 +267,8 @@ public class WPSCapabilitiesJsonModule extends AbstractWPSJsonModule {
             jg.writeStringField(IDENTIFIER, t.getIdentifier().getStringValue());
             jg.writeStringField(TITLE1, t.getTitleArray(0).getStringValue());
             jg.writeStringField(_PROCESS_VERSION, t.getProcessVersion());
-            jg.writeStringField(_JOB_CONTROL_OPTIONS, t.getJobControlOptions().get(0).toString());
-            jg.writeStringField(_OUTPUT_TRANSMISSION, t.getOutputTransmission().get(0).toString());
+            jg.writeStringField(_JOB_CONTROL_OPTIONS, Utils.getStringFromObjectList(t.getJobControlOptions()));
+            jg.writeStringField(_OUTPUT_TRANSMISSION, Utils.getStringFromObjectList(t.getOutputTransmission()));
             jg.writeStringField(URL, EndpointUtil.PROXYBASEURL + "processes/" + t.getIdentifier().getStringValue());
             jg.writeEndObject();
         }
