@@ -47,7 +47,7 @@
     <bean id="ObjectMapper" class="org.n52.restfulwpsproxy.serializer.WPSBeansObjectMapper" />
     
     <bean id="proxyBaseUrl" class="java.lang.String">
-        <constructor-arg type="String" value="http://tamis.dev.52north.org/52n-wps-proxy-webapp-1.0-SNAPSHOT/"/>
+        <constructor-arg type="String" value="${base.url}"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
