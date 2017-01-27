@@ -105,7 +105,7 @@ public abstract class AbstractWPSClient {
         this.restTemplate = restTemplate;
 
         this.headers = new HttpHeaders();
-        this.headers.add("Content-Type", "application/xml");
+//        this.headers.add("Content-Type", "application/xml");
         this.headers.add("Accept", "application/xml");
     }
 
