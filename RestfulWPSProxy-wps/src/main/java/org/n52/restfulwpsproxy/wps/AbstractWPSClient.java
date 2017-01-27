@@ -58,7 +58,10 @@ public abstract class AbstractWPSClient {
         public RequestUrlBuilder(String requestType) {
             this.requestParams.put(GET_PARAM_REQUEST, requestType);
             this.requestParams.put(GET_PARAM_SERVICE, GET_PARAM_SERVICE_DEFAULT);
-            this.requestParams.put(GET_PARAM_VERSION, GET_PARAM_VERSION_DEFAULT);
+            //GetCapabilities doesn't get a version parameter. TODO: Possibly handle AcceptVersions parameter.
+            if(!requestType.equals(CapabilitiesClient.REQUEST_GET_CAPABILITIES)){
+                this.requestParams.put(GET_PARAM_VERSION, GET_PARAM_VERSION_DEFAULT);
+            }
         }
 
         public RequestUrlBuilder version(String version) {

@@ -34,7 +34,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class CapabilitiesClient extends AbstractWPSClient {
 
-    private static final String REQUEST_GET_CAPABILITIES = "GetCapabilities";
+    public static final String REQUEST_GET_CAPABILITIES = "GetCapabilities";
 
     /**
      * Constructor.
