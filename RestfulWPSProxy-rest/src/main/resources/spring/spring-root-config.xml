@@ -13,6 +13,5 @@
     
     <import resource="classpath:spring/spring-rest-config.xml"/>
     <import resource="classpath:spring/spring-wps-client-config.xml"/>
-    <import resource="classpath:spring/spring-soap-config.xml"/>
 
 </beans>

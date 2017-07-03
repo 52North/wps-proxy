@@ -18,27 +18,9 @@
     <servlet>
         <servlet-name>rest-servlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>  
-            <param-name>transformWsdlLocations</param-name>  
-            <param-value>true</param-value>  
-        </init-param> 
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/classes/spring/spring-rest-servlet-context.xml</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    
-    <servlet>
-        <servlet-name>webservices</servlet-name>
-        <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>transformWsdlLocations</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value></param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -47,14 +29,6 @@
         <servlet-name>rest-servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>  
-        <servlet-name>webservices</servlet-name>  
-        <url-pattern>/endpoints/*</url-pattern>  
-    </servlet-mapping>  
-    <servlet-mapping>  
-        <servlet-name>webservices</servlet-name>  
-        <url-pattern>*.wsdl</url-pattern>  
-    </servlet-mapping>  
 
 
 </web-app>

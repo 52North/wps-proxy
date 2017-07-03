@@ -11,32 +11,6 @@
     
     <artifactId>52n-wps-proxy-webapp</artifactId>
     <packaging>war</packaging>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>  
-                <artifactId>jaxb2-maven-plugin</artifactId>  
-                <version>1.4</version>  
-                <executions>  
-                    <execution>  
-                        <goals>  
-                            <goal>xjc</goal>  
-                        </goals>  
-                        <phase>generate-sources</phase>  
-                    </execution>  
-                </executions>  
-                <configuration>  
-                    <clearOutputDir>false</clearOutputDir>  
-                    <outputDirectory>src/main/java</outputDirectory>  
-                    <schemaDirectory>src/main/webapp/schemas</schemaDirectory>  
-                    <includeSchema>**/*.xsd</includeSchema>                        
-                    <enableIntrospection>false</enableIntrospection>  
-                </configuration>  
-            </plugin>  
-        </plugins>
-        
-    </build>
 
     <dependencies>
         <dependency>
@@ -89,12 +63,6 @@
             <artifactId>spring-ws-core</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>wsdl4j</groupId>
-            <artifactId>wsdl4j</artifactId>
-            <version>1.6.2</version>
-        </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
